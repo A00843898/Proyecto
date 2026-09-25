@@ -71,9 +71,7 @@ En el programa, la función `merge()` que junta las partes ordenadas tiene una c
 
 ### SICT0302: Toma decisiones
 
-Se eligió **Merge Sort** porque el programa necesita ordenar a los jugadores utilizando diferentes estadísticas y la cantidad de datos puede aumentar conforme crezca el torneo. Se consideraron otros métodos vistos anteriormente, como selección y burbuja, pero estos pueden llegar a tener una complejidad de `O(n²)`.
-
-Por esta razón, Merge Sort permite que el programa mantenga un buen funcionamiento aunque aumente la cantidad de jugadores.
+Elegi **Merge Sort** porque el programa necesita ordenar a los jugadores utilizando diferentes estadísticas y la cantidad de datos puede aumentar conforme crezca el torneo. Por esta razón, Merge Sort permite que el programa mantenga un buen funcionamiento aunque aumente la cantidad de jugadores.
 
 También se aplicó la modularidad separando el programa en diferentes archivos:
 
