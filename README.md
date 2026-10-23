@@ -69,7 +69,6 @@ La complejidad de Merge Sort es `O(n log n)` en el mejor, promedio y peor caso. 
 
 En el programa, la función `merge()` que junta las partes ordenadas tiene una complejidad de `O(n)`. Las operaciones para consultar o actualizar una estadística de un jugador tienen una complejidad de `O(1)`.
 
-### SICT0302: Toma decisiones
 
 ### SICT0302: Toma decisiones
 
