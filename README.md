@@ -71,10 +71,14 @@ En el programa, la función `merge()` que junta las partes ordenadas tiene una c
 
 ### SICT0302: Toma decisiones
 
-Elegi **Merge Sort** porque el programa necesita ordenar a los jugadores utilizando diferentes estadísticas y la cantidad de datos puede aumentar conforme crezca el torneo. Por esta razón, Merge Sort permite que el programa mantenga un buen funcionamiento aunque aumente la cantidad de jugadores.
+### SICT0302: Toma decisiones
 
-También se aplicó la modularidad separando el programa en diferentes archivos:
+Para elegir el algoritmo de ordenamiento, consideré tres opciones: Selection Sort, Bubble Sort y Merge Sort. La decisión se basó en su complejidad y en las necesidades del programa, ya que se requiere ordenar a los jugadores por goles, minutos jugados y tarjetas, y la cantidad de datos podría aumentar con el tiempo.
 
-* `Jugador.h`: contiene la información y las operaciones de los jugadores.
-* `sorts.h`: contiene el algoritmo utilizado para ordenar los datos.
-* `main.cpp`: contiene el menú y la interacción con el usuario.
+- **Selection Sort:** tiene una complejidad de \(O(n^2)\) en el mejor, promedio y peor caso. Su implementación es sencilla, pero puede requerir muchas comparaciones cuando aumenta la cantidad de jugadores.
+- **Bubble Sort:** en su versión optimizada puede alcanzar \(O(n)\) en el mejor caso, aunque su complejidad promedio y en el peor caso es \(O(n^2)\). Por eso, su rendimiento puede disminuir cuando hay más datos que ordenar.
+- **Merge Sort:** tiene una complejidad de \(O(n\log n)\) en el mejor, promedio y peor caso. Como desventaja, necesita memoria auxiliar para combinar las partes ordenadas y su implementación es un poco más elaborada.
+
+Después de comparar estas opciones, elegí **Merge Sort**, porque ofrece un rendimiento más consistente cuando aumenta la cantidad de jugadores. Aunque requiere memoria adicional, considero que esta desventaja es razonable para el tamaño y las necesidades del proyecto.
+
+El algoritmo se utiliza para ordenar a los jugadores según el criterio seleccionado, conservando juntos sus datos, como nombre, equipo y estadísticas. De esta manera, el programa puede mostrar distintas clasificaciones sin tener que implementar un algoritmo diferente para cada una.
