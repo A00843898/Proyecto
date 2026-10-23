@@ -1,3 +1,4 @@
+
 #ifndef JUGADOR_H_
 #define JUGADOR_H_
 
@@ -51,7 +52,7 @@ public:
 
     int getAmarillas() {
         return amarillas;
-    }
+    } 
 
     int getRojas() {
         return rojas;

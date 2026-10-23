@@ -1,0 +1,7 @@
+
+Ana;Tigres;8;540;1;0
+Sofia;Halcones;5;620;2;0
+Valeria;Leones;10;480;0;1
+Mariana;Aguilas;3;700;3;0
+Daniela;Tigres;6;590;1;0
+Camila;Leones;4;510;2;1
