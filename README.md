@@ -79,79 +79,103 @@ Es necesario que `jugadores.txt` se encuentre en la carpeta desde la que se ejec
 
 ### SICT0301: Evalúa los componentes
 
-En el programa se utilizan dos estructuras principales: un árbol binario de búsqueda (BST) para almacenar y buscar jugadores, y un vector junto con Merge Sort para ordenar las estadísticas. También se utilizan archivos de texto para cargar y guardar la información.
+Para desarrollar el programa fue necesario analizar la complejidad de las estructuras y los algoritmos utilizados, considerando las operaciones que realiza cada uno. Se utilizan principalmente un árbol binario de búsqueda (BST), un vector y Merge Sort. También se incluyen procesos para leer y guardar información en archivos.
 
 **Árbol binario de búsqueda (BST)**
 
-El árbol organiza a los jugadores por nombre, colocando los nombres menores a la izquierda y los mayores a la derecha.
+El BST almacena a los jugadores de acuerdo con su nombre. Cuando se agrega un jugador, se compara su nombre con el de los nodos existentes: los nombres menores se colocan a la izquierda y los mayores a la derecha.
 
-- **Búsqueda e inserción:** tienen una complejidad de `O(h)`, donde `h` es la altura del árbol. Si está razonablemente equilibrado, su costo es `O(log n)`. En el peor caso, cuando el árbol se encuentra desbalanceado, llega a `O(n)`.
-- **Recorrido en orden:** tiene una complejidad de `O(n)`, porque visita todos los jugadores una vez. Se utiliza para obtener la lista alfabética y para guardar los registros en el archivo.
-- **Memoria:** el árbol requiere `O(n)` espacio para almacenar los jugadores.
+- **Inserción:** tiene una complejidad de `O(h)`, donde `h` representa la altura del árbol. Si el árbol está equilibrado, el costo es `O(log n)`, mientras que en el peor caso puede llegar a `O(n)`.
+- **Búsqueda:** utiliza el mismo principio de comparación para localizar a un jugador por su nombre. Su complejidad también es `O(h)`, con un mejor rendimiento cuando el árbol está equilibrado.
+- **Recorrido en orden:** tiene una complejidad de `O(n)`, porque visita todos los nodos una vez. Se utiliza para obtener la lista de jugadores en orden alfabético y para reunirlos antes de realizar una clasificación.
+- **Memoria:** requiere `O(n)` espacio para almacenar los nodos del árbol.
 
-Como el árbol no se equilibra automáticamente, su rendimiento depende del orden en que se agregan los jugadores.
+El BST no se equilibra automáticamente, por lo que su rendimiento depende del orden en que se insertan los jugadores.
+
+**Vector**
+
+El vector se utiliza para reunir temporalmente los jugadores del árbol y trabajar con sus estadísticas sin modificar la organización original del BST.
+
+- **Recorrido y copia de los jugadores:** requiere `O(n)` tiempo y `O(n)` espacio adicional.
+- **Acceso por posición:** tiene una complejidad de `O(1)`, lo que permite consultar y modificar los elementos durante el ordenamiento.
 
 **Merge Sort**
 
-Se utiliza para ordenar a los jugadores por goles, minutos y tarjetas, de mayor a menor.
+Se utiliza para generar las clasificaciones de goles, minutos jugados y tarjetas, ordenando a los jugadores de mayor a menor según la estadística seleccionada.
 
 - **Mejor caso, caso promedio y peor caso:** `O(n log n)`.
-- **Espacio adicional:** `O(n)`, debido a los vectores temporales utilizados durante el ordenamiento.
+- **Espacio adicional:** `O(n)`, debido a los vectores temporales que se utilizan para combinar las partes ordenadas.
 
-La función `merge()` combina las partes ordenadas en tiempo `O(n)`, mientras que `mergeSort()` divide el vector y ordena sus partes.
+El algoritmo divide el vector en partes más pequeñas hasta que cada una contiene un elemento. Después, las combina en el orden correspondiente. La combinación requiere `O(n)` tiempo por nivel de división, mientras que el algoritmo trabaja con aproximadamente `log n` niveles.
 
 **Lectura y escritura de archivos**
 
-La función `cargarJugadores()` lee el archivo línea por línea, valida los registros y agrega los jugadores al árbol. La lectura y validación requiere recorrer los `n` registros. Sin embargo, el costo de construir el árbol depende de su altura:
+La función `cargarJugadores()` lee los registros de `jugadores.txt` y los inserta en el BST. La lectura y validación de los datos requiere `O(n)` tiempo, considerando que cada registro contiene una cantidad fija de campos. La construcción del árbol requiere, en promedio, `O(n log n)` y puede llegar a `O(n²)` si las inserciones generan un árbol completamente desbalanceado.
 
-- **Caso promedio:** `O(n log n)`.
-- **Peor caso:** `O(n²)`, si los jugadores se insertan en un orden que provoca un árbol desbalanceado.
+Por otra parte, la función `guardarArchivo()` recorre el árbol en orden y escribe los datos de cada jugador en el archivo. Este proceso tiene una complejidad de `O(n)`, ya que cada nodo se visita una sola vez.
 
-Por otro lado, `guardarArchivo()` recorre el árbol en orden y escribe cada jugador en `jugadores.txt`. Como visita todos los nodos una sola vez, su complejidad es `O(n)`.
+**Complejidad general**
 
-**Consultas y actualización de estadísticas**
+La complejidad depende de la operación que se realice:
 
-La búsqueda de un jugador mediante `buscar()` tiene una complejidad de `O(h)`. Una vez localizado, agregar goles, minutos o tarjetas requiere `O(1)`, ya que únicamente se modifica el valor correspondiente.
+- Cargar los jugadores: `O(n log n)` en promedio y `O(n²)` en el peor caso.
+- Buscar un jugador: `O(log n)` si el árbol está equilibrado y `O(n)` en el peor caso.
+- Mostrar todos los jugadores: `O(n)`.
+- Generar una clasificación: `O(n log n)`, debido al ordenamiento con Merge Sort.
+- Guardar los cambios: `O(n)`.
 
-Para generar una clasificación, primero se obtienen los jugadores del árbol en `O(n)` y después se ordenan con Merge Sort en `O(n log n)`. Por lo tanto, el costo total de esta operación es `O(n log n)`.
-
-**Complejidad general y memoria**
-
-El programa no tiene un único costo de ejecución, ya que depende de la operación seleccionada. La carga inicial puede llegar a `O(n²)` en el peor caso por la inserción en el BST. Las clasificaciones requieren `O(n log n)`, mientras que guardar los datos necesita `O(n)`.
-
-En cuanto a memoria, el árbol almacena `O(n)` jugadores. Cuando se generan clasificaciones o se obtiene la lista, también se utiliza un vector de `O(n)` elementos. Por lo tanto, el espacio adicional utilizado por estas operaciones es `O(n)`.
+Por lo tanto, el ordenamiento de las clasificaciones tiene un costo de `O(n log n)`, mientras que la búsqueda y la carga dependen de la altura del árbol. En el peor caso, la construcción del BST puede llegar a `O(n²)`, por lo que no sería correcto asignar una sola complejidad a todas las operaciones del programa.
 
 ### SICT0302: Toma decisiones
 
-Para seleccionar la estructura de almacenamiento se compararon tres alternativas: vector, lista enlazada y árbol binario de búsqueda. Los criterios considerados fueron el costo de buscar jugadores por nombre, insertar registros y recorrer la información en orden alfabético.
+Para decidir cómo almacenar y organizar la información, primero se consideró qué necesitaba hacer el programa. No era suficiente con guardar los registros: también debía permitir buscar a una jugadora por su nombre para actualizar sus estadísticas, mostrar la lista en orden alfabético y generar clasificaciones por goles, minutos y tarjetas.
 
-| Estructura | Búsqueda por nombre | Inserción | Recorrido alfabético |
-|---|---|---|---|
-| Vector sin ordenar | `O(n)` | `O(1)` al final | `O(n log n)` si se ordena |
-| Lista enlazada | `O(n)` | `O(1)` al inicio | `O(n log n)` si se ordena |
-| BST | `O(h)` | `O(h)` | `O(n)` si se recorre en orden |
+A partir de estas necesidades, se consideraron tres alternativas:
 
-Las complejidades del BST dependen de su altura: en un árbol razonablemente equilibrado, la búsqueda y la inserción son `O(log n)`, mientras que en el peor caso son `O(n)`.
+**1. Vector**
 
-Se eligió el BST porque el programa necesita localizar jugadores por nombre para actualizar sus estadísticas y también mostrar los registros en orden alfabético. Aunque un vector ordenado permitiría utilizar búsqueda binaria en `O(log n)`, insertar nuevos registros manteniendo ese orden puede requerir desplazar elementos, con un costo de `O(n)`. La lista enlazada tampoco ofrece una búsqueda eficiente por nombre.
+Un vector permite almacenar los registros de forma sencilla y acceder directamente a ellos mediante su posición. Además, facilita aplicar algoritmos de ordenamiento como Merge Sort.
 
-Para las clasificaciones se mantuvo Merge Sort, ya que el orden de los jugadores cambia según la estadística que se quiera consultar. Utilizar el BST para organizar cada clasificación implicaría trabajar con un criterio diferente al nombre. En cambio, reunir los jugadores en un vector y aplicar Merge Sort permite generar las distintas tablas en `O(n log n)`.
+Sin embargo, para encontrar a una jugadora por nombre sería necesario recorrer sus elementos uno por uno, lo que requiere `O(n)` tiempo. También sería necesario ordenar el vector por nombre para realizar búsquedas binarias, y esto tendría un costo adicional de ordenamiento. Aunque es una alternativa útil para generar las clasificaciones, no resulta tan conveniente como estructura principal si se realizan búsquedas y actualizaciones por nombre.
 
-Por estas razones, se decidió utilizar ambas estructuras de acuerdo con su función: el BST para almacenar, buscar y recorrer jugadores por nombre, y el vector con Merge Sort para generar las clasificaciones.
+**2. Lista enlazada**
+
+Una lista enlazada permite agregar registros y recorrerlos en orden. También facilita insertar elementos sin desplazar los demás, como sucede en un vector.
+
+Sin embargo, para encontrar a una jugadora por nombre se tendría que recorrer la lista hasta localizarla, por lo que la búsqueda tendría una complejidad de `O(n)`. Además, no permite acceder directamente a un elemento por su posición. Por estas razones, tampoco representa la mejor opción para las búsquedas que necesita el programa.
+
+**3. Árbol binario de búsqueda (BST)**
+
+El BST organiza los registros utilizando el nombre como criterio de comparación. Esto permite dirigir la búsqueda hacia la izquierda o la derecha del árbol, sin tener que revisar todos los jugadores cuando su altura es reducida.
+
+Su búsqueda e inserción tienen una complejidad de `O(log n)` cuando el árbol está equilibrado, aunque pueden llegar a `O(n)` en el peor caso. Otra ventaja es que permite obtener los nombres en orden alfabético mediante un recorrido en orden, sin necesitar un ordenamiento adicional.
+
+**Comparación y decisión**
+
+Al comparar las tres alternativas, se tomó en cuenta el tiempo necesario para buscar una jugadora, la facilidad para agregar registros y la posibilidad de obtener la información en orden alfabético.
+
+El vector y la lista enlazada permiten almacenar y recorrer los datos, pero sus búsquedas por nombre requieren revisar los elementos uno por uno. En cambio, el BST utiliza las comparaciones entre nombres para dirigir la búsqueda y también permite obtener los registros en orden alfabético.
+
+Por eso se eligió el BST como estructura principal. Aunque no garantiza búsquedas de `O(log n)` en todos los casos, responde mejor a las operaciones que necesita el programa, especialmente porque las actualizaciones requieren localizar primero a una jugadora.
+
+Para las clasificaciones se tomó una decisión distinta. Se consideró ordenar directamente los datos del BST, pero esto modificaría su organización por nombre. También se podía utilizar un algoritmo de ordenamiento sencillo, como Bubble Sort, cuya complejidad promedio y en el peor caso es `O(n²)`. Finalmente, se eligió Merge Sort porque permite ordenar las estadísticas en `O(n log n)`.
+
+De esta manera, se utiliza cada estructura para la tarea en la que resulta más conveniente: el BST mantiene y busca a los jugadores por nombre, mientras que el vector y Merge Sort permiten generar las diferentes clasificaciones sin alterar el árbol.
 
 ### SICT0303: Implementa acciones científicas
 
-El programa implementa mecanismos para almacenar, consultar, modificar y conservar información mediante estructuras de datos y archivos de texto.
+El programa incluye mecanismos para consultar, actualizar y conservar la información de los jugadores. Para esto, se utilizan las siguientes funciones:
 
-- **Lectura de archivos:** `cargarJugadores()` abre `jugadores.txt` y lee sus registros línea por línea. Utiliza `stringstream` para separar los campos.
-- **Validación:** se revisa que los registros tengan los campos necesarios, que las estadísticas sean números válidos y que no existan valores negativos. También se evitan nombres duplicados.
-- **Almacenamiento:** cada registro válido se convierte en un objeto `Jugador` y se agrega al BST mediante `agregar()`.
-- **Búsqueda:** `buscar()` localiza a un jugador por su nombre para consultar o actualizar sus estadísticas.
-- **Consulta y ordenamiento:** `obtenerJugadores()` reúne los registros en un vector y Merge Sort los ordena según la estadística seleccionada.
-- **Actualización:** las funciones de la clase `Jugador` permiten agregar goles, minutos y tarjetas sin modificar directamente sus atributos.
-- **Escritura de archivos:** `guardarArchivo()` recorre el BST en orden y escribe los datos actualizados en `jugadores.txt`. Esta operación se realiza al seleccionar la opción de salir del programa.
+- **Carga de información:** `cargarJugadores()` abre `jugadores.txt`, lee cada línea y separa sus campos mediante `stringstream`. Después de validar los datos, crea un objeto `Jugador` y lo agrega al BST.
+- **Búsqueda:** `buscar()` localiza a una jugadora utilizando su nombre. Esto permite acceder directamente a sus datos dentro del árbol y realizar las actualizaciones correspondientes.
+- **Consulta de registros:** `obtenerJugadores()` recorre el árbol en orden y reúne los registros en un vector. Así se puede mostrar la lista completa en orden alfabético.
+- **Clasificaciones:** `mostrarClasificacion()` obtiene los jugadores mediante `obtenerJugadores()` y utiliza Merge Sort para ordenarlos según la estadística seleccionada.
+- **Actualización:** las funciones de la clase `Jugador` permiten agregar goles, minutos y tarjetas. Los cambios se realizan sobre el registro encontrado en el BST.
+- **Guardado de información:** `guardarArchivo()` recorre el árbol en orden y escribe los datos actualizados en `jugadores.txt`. Esta función se ejecuta cuando el usuario selecciona la opción de salir.
 
-De esta manera, la información no se limita a mantenerse durante la ejecución: también se conserva en el archivo para que pueda recuperarse cuando el programa vuelva a iniciarse.
+También se consideró la facilidad de uso al momento de consultar y actualizar los registros. Antes de solicitar el nombre de una jugadora, el programa muestra los nombres disponibles. Esto permite que el usuario conozca las opciones registradas y reduce los errores al escribir el nombre.
+
+Con estos mecanismos, la información no solamente se almacena, sino que puede localizarse, consultarse, modificarse y conservarse en el archivo para futuras ejecuciones.
 
 ### SEG0701: Cultura digital
 
