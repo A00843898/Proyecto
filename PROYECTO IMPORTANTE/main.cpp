@@ -162,16 +162,25 @@ void mostrarClasificacion(BST& arbol, int criterio) {
 
 Jugador* seleccionarJugador(BST& arbol) {
     string nombre;
+    vector<Jugador> jugadores;
+
+    arbol.obtenerJugadores(jugadores);
+
+    cout << "\nJUGADORAS DISPONIBLES:\n";
+
+    for (int i = 0; i < jugadores.size(); i++) {
+        cout << "- " << jugadores[i].getNombre() << "\n";
+    }
 
     cin.ignore(1000, '\n');
 
-    cout << "Escribe el nombre del jugador: ";
+    cout << "\nEscribe el nombre de la jugadora: ";
     getline(cin, nombre);
 
     Jugador* jugador = arbol.buscar(nombre);
 
     if (jugador == 0) {
-        cout << "\nNo se encontro ese jugador.\n";
+        cout << "\nNo se encontro esa jugadora.\n";
     }
 
     return jugador;
@@ -267,7 +276,15 @@ int main() {
                 }
             }
         }
-        else if (opcion != 10) {
+        else if (opcion == 10) {
+            if (arbol.guardarArchivo("jugadores.txt")) {
+                cout << "\nLos datos se guardaron correctamente.\n";
+            }
+            else {
+                cout << "\nError: no se pudieron guardar los datos.\n";
+            }
+        }
+        else {
             cout << "\nOpcion no valida.\n";
         }
 
@@ -276,4 +293,4 @@ int main() {
     cout << "\nPrograma finalizado.\n";
 
     return 0;
-} 
+}

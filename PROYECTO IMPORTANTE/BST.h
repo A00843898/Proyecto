@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 #include "Jugador.h"
 
 using namespace std;
@@ -38,6 +39,21 @@ private:
             recorrerEnOrden(nodo->izquierda, jugadores);
             jugadores.push_back(nodo->dato);
             recorrerEnOrden(nodo->derecha, jugadores);
+        }
+    }
+
+    void guardarEnOrden(NodoBST* nodo, ofstream& salida) {
+        if (nodo != 0) {
+            guardarEnOrden(nodo->izquierda, salida);
+
+            salida << nodo->dato.getNombre() << ";"
+                   << nodo->dato.getEquipo() << ";"
+                   << nodo->dato.getGoles() << ";"
+                   << nodo->dato.getMinutos() << ";"
+                   << nodo->dato.getAmarillas() << ";"
+                   << nodo->dato.getRojas() << "\n";
+
+            guardarEnOrden(nodo->derecha, salida);
         }
     }
 
@@ -107,6 +123,20 @@ public:
     void obtenerJugadores(vector<Jugador>& jugadores) {
         jugadores.clear();
         recorrerEnOrden(raiz, jugadores);
+    }
+
+    bool guardarArchivo(string archivo) {
+        ofstream salida(archivo.c_str());
+
+        if (!salida.is_open()) {
+            return false;
+        }
+
+        guardarEnOrden(raiz, salida);
+
+        salida.close();
+
+        return !salida.fail();
     }
 };
 
